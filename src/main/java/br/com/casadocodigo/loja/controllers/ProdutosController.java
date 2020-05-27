@@ -9,6 +9,7 @@ import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -23,7 +24,7 @@ public class ProdutosController {
 
 	@Autowired
 	private ProdutoDAO produtoDao;
-	
+
 	@InitBinder
 	public void initBinder(WebDataBinder binder) {
 		binder.addValidators(new ProdutoValidation());
@@ -33,17 +34,23 @@ public class ProdutosController {
 	public ModelAndView form(Produto produto) {
 		ModelAndView mv = new ModelAndView("produtos/form");
 		mv.addObject("tipos", TipoPreco.values());
+		
 		return mv;
 	}
 
 	@RequestMapping(method = RequestMethod.POST)
-	public ModelAndView grava(@Valid Produto produto, BindingResult result, RedirectAttributes attributes) {
+	public ModelAndView grava(MultipartFile sumario, @Valid Produto produto, BindingResult result,
+			RedirectAttributes attributes) {
+		
+		System.out.println(sumario.getOriginalFilename());
+		
 		if (result.hasErrors()) {
 			return form(produto);
 		}
 		produtoDao.gravar(produto);
 		ModelAndView modelAndView = new ModelAndView("redirect:produtos");
 		attributes.addFlashAttribute("sucesso", "Produto cadastrado com sucesso!");
+		
 		return modelAndView;
 	}
 
