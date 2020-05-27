@@ -32,6 +32,8 @@ public class Produto {
 	@ElementCollection
 	private List<Preco> precos;
 
+	private String sumarioPath;
+
 	public Long getId() {
 		return id;
 	}
@@ -78,6 +80,14 @@ public class Produto {
 
 	public void setDataLancamento(Calendar dataLancamento) {
 		this.dataLancamento = dataLancamento;
+	}
+
+	public String getSumarioPath() {
+		return sumarioPath;
+	}
+
+	public void setSumarioPath(String sumarioPath) {
+		this.sumarioPath = sumarioPath;
 	}
 
 	@Override
