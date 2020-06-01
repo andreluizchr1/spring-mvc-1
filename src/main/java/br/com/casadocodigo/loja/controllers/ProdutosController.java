@@ -27,7 +27,7 @@ public class ProdutosController {
 
 	@Autowired
 	private ProdutoDAO produtoDao;
-	
+
 	@Autowired
 	private FileSaver fileSaver;
 
@@ -40,7 +40,7 @@ public class ProdutosController {
 	public ModelAndView form(Produto produto) {
 		ModelAndView mv = new ModelAndView("produtos/form");
 		mv.addObject("tipos", TipoPreco.values());
-		
+
 		return mv;
 	}
 
@@ -48,19 +48,19 @@ public class ProdutosController {
 	@CacheEvict(value = "produtosHome", allEntries = true)
 	public ModelAndView grava(MultipartFile sumario, @Valid Produto produto, BindingResult result,
 			RedirectAttributes attributes) {
-		
+
 		new FileSaver();
-		
+
 		if (result.hasErrors()) {
 			return form(produto);
 		}
-		
+
 		String path = fileSaver.write("arquivos-sumario", sumario);
 		produto.setSumarioPath(path);
 		produtoDao.gravar(produto);
 		ModelAndView modelAndView = new ModelAndView("redirect:produtos");
 		attributes.addFlashAttribute("sucesso", "Produto cadastrado com sucesso!");
-		
+
 		return modelAndView;
 	}
 
@@ -70,11 +70,12 @@ public class ProdutosController {
 		modelAndView.addObject("produtos", produtoDao.listar());
 		return modelAndView;
 	}
-	
+
 	@RequestMapping("/detalhe/{id}")
 	public ModelAndView detalhe(@PathVariable("id") Integer id) {
 		ModelAndView modelAndView = new ModelAndView("produtos/detalhe");
 		modelAndView.addObject("produto", produtoDao.find(id));
 		return modelAndView;
 	}
+
 }
